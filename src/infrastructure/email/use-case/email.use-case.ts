@@ -1,17 +1,41 @@
-import sgMail from '@sendgrid/mail'
-import { logger } from '../../../shared/loggers/logger'
+import { promises as fs } from 'fs';
+import path from 'path';
+import mailjet from 'node-mailjet';
+import Handlebars from 'handlebars';
 
-const sendEmail = async ({ to, from, subject, text, html }) => {
-  const msg = { to, from, subject, text, html }
-  try {
-    await sgMail.send(msg)
-    logger.info('Email sent successfully')
-  } catch (error) {
-    console.error('Error sending email:', error)
-    if (error.response) {
-      console.error(error.response.body)
+const mailjetConfig = {
+  apiKey: process.env.MAILJET_API_KEY,
+  apiSecret: process.env.MAILJET_API_SECRET
+};
+
+const mailjetClient = mailjet.apiConnect(mailjetConfig.apiKey, mailjetConfig.apiSecret);
+
+  async function getTemplate(templateName) {
+    const templatePath = path.join(__dirname, '..', 'templates', `${templateName}.hbs`);
+    try {
+      return await fs.readFile(templatePath, 'utf-8');
+    } catch (error) {
+      console.error('Error reading email template:', error);
+      throw error; 
     }
   }
-}
 
-export default sendEmail
+  export const sendEmail = async (toEmail, subject, template, data) => {
+    const templateSource = await getTemplate(template);
+    const templateCompile = Handlebars.compile(templateSource);
+    const htmlPart = templateCompile(data);
+    await mailjetClient.post('send', { version: 'v3.1' })
+      .request({
+        Messages: [{
+          From: {
+            Email: 'ssobralbreno@gmail.com',
+            Name: 'BTC Company'
+          },
+          To: [{
+            Email: toEmail,
+          }],
+          Subject: subject,
+          HTMLPart: htmlPart
+        }]
+      });
+  }

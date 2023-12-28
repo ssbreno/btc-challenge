@@ -1,5 +1,5 @@
 export enum TransactionTypeEnum {
-  DEBIT = 'DEBIT',
-  WITHDRAW = 'WITHDRAW',
-  CREDIT = 'CREDIT',
+  BUY = 'BUY',
+  DEPOSIT = 'DEPOSIT',
+  SELL = 'SELL',
 }

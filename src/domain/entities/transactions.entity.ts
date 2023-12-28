@@ -15,7 +15,7 @@ export class Transaction {
   id: number
 
   @ManyToOne(() => Account, (account) => account.transactions)
-  account: Account
+  account?: Account
 
   @Column({
     type: 'enum',
@@ -25,13 +25,13 @@ export class Transaction {
   type?: TransactionTypeEnum
 
   @Column('decimal', { precision: 10, scale: 2 })
-  amount: number
+  amount?: number
 
   @Column('decimal', { precision: 10, scale: 2, nullable: true })
-  btcAmount: number
+  btcAmount?: number
 
   @Column('decimal', { precision: 10, scale: 2, nullable: true })
-  btcPriceAtTransaction: number
+  btcPriceAtTransaction?: number
 
   @CreateDateColumn()
   createdAt?: Date

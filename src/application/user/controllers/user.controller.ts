@@ -12,14 +12,9 @@ export class UserController {
     logger.warn('[POST] /login')
     this.server.post('/login', this.login.bind(this))
   }
-  async login(
-    request: FastifyRequest,
-    reply: FastifyReply,
-  ): Promise<void> {
+  async login(request: FastifyRequest, reply: FastifyReply): Promise<void> {
     const body: AuthDTO = request.body
     const account = await this.loginUseCase.login(body)
     reply.send(account)
   }
-
-
 }

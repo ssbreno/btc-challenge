@@ -4,5 +4,5 @@ export const formatBalanceInBRL = (balance: number): string => {
     currency: 'BRL',
     minimumFractionDigits: 2,
     maximumFractionDigits: 2,
-  });
-};
+  })
+}

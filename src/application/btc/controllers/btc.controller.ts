@@ -1,28 +1,45 @@
 import { FastifyInstance, FastifyReply, FastifyRequest } from 'fastify'
 import { logger } from '../../../shared/loggers/logger'
 import { BTCMarketUseCase } from '../use-cases/find-btc.use-case'
+import { BuyBTCUseCase } from '../use-cases/buy-btc.use-case';
+import { extractToken } from '../../../shared/utils/extract-token';
 
 export class BTCController {
-  public unprotectedRoutes = ['/btc-market/ticker']
-  private bTCMarketUseCase: BTCMarketUseCase
+  private bTCMarketUseCase = new BTCMarketUseCase();
+  private buyBTCUseCase = new BuyBTCUseCase();
 
   constructor(private server: FastifyInstance) {
     this.bTCMarketUseCase = new BTCMarketUseCase()
-    logger.warn('[GET] /btc-market/ticker')
-    this.server.get('/btc-market/ticker', this.checkBTCMarket.bind(this))
+    logger.warn('[GET] /btc/price')
+    this.server.get('/btc/price', this.checkBTCMarket.bind(this))
+    logger.warn('[POST] /btc/purchase')
+    this.server.post('/btc/purchase', this.buyBTC.bind(this))
   }
 
-  private async checkBTCMarket(
+   async checkBTCMarket(
     request: FastifyRequest,
     reply: FastifyReply,
   ): Promise<void> {
     try {
-      const tickerObservable = this.bTCMarketUseCase.fetchBitcoinTicker()
-      tickerObservable.subscribe({
-        next: (data) => reply.send(data),
-        error: (err) => reply.status(500).send(err.message),
-      })
+      const tickerObservable = await this.bTCMarketUseCase.execute();
+      reply.send(tickerObservable)
     } catch (error) {
+      reply.status(500).send(`Server error: ${error.message}`)
+    }
+  }
+
+   async buyBTC(
+    request: FastifyRequest,
+    reply: FastifyReply,
+  ): Promise<void> {
+    try {
+      const token = extractToken(request, reply)
+      if (!token) return
+      const body = request.body;
+      const buyBTC = await this.buyBTCUseCase.execute(token, body);
+      reply.send(buyBTC)
+    } catch (error) {
+      console.log(error)
       reply.status(500).send(`Server error: ${error.message}`)
     }
   }

@@ -27,9 +27,9 @@ export class Transaction {
   @Column('decimal', { precision: 10, scale: 2 })
   amount?: number
 
-  @Column('decimal', { precision: 10, scale: 2, nullable: true })
-  btcAmount?: number
-
+  @Column('decimal', { precision: 18, scale: 8, nullable: true })
+  btcAmount?: number;
+  
   @Column('decimal', { precision: 10, scale: 2, nullable: true })
   btcPriceAtTransaction?: number
 

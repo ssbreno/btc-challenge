@@ -1,6 +1,6 @@
 # BTC-CHALLENGE
 
-![Code Coverage](https://img.shields.io/badge/Code%20Coverage-36%25-critical?style=flat)
+![image](https://github.com/ssbreno/btc-challenge/assets/8092325/773c2497-6b16-49d0-b76e-2636e150e297)
 
 ## Introduction
 
@@ -53,6 +53,9 @@ npm test
 ### Conclusion
 
 BTC-CHALLENGE is an ongoing project aimed at providing a comprehensive platform for simulating Bitcoin trading. Your contributions and feedback are welcome!
+
+<img width="635" alt="image" src="https://github.com/ssbreno/btc-challenge/assets/8092325/2d761dd4-8810-4831-bd4d-33316ed6b156">
+
 
 ### Enhancements Made:
 

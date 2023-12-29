@@ -10,7 +10,7 @@ export class FindAllTransactionsUseCase {
 
   async findAllTransactions(
     dto: FindAllTransactionsDTO,
-    req: any
+    req: any,
   ): Promise<Pagination<any>> {
     const take = dto.take || 12
     const page = dto.page || 1

@@ -18,9 +18,11 @@ export class BuyBTCUseCase {
     try {
       const account = await this.checkAccountBalance(req)
       const btcPrice = await this.fetchBTCPrice()
+      if(body.amount < 0) throw new Error('Negative amount')
       const btcAmount = await this.calculateBTCAmount(body.amount, btcPrice)
       await this.createBTCTransaction(body.amount, btcPrice, btcAmount, account)
-      await this.updateAccountBalance(body, req)
+
+      await this.updateAccountBalance(btcAmount, req)
       await this.sendConfirmationEmail(req.name, body.amount, btcAmount)
 
       return { account: account, btcPrice: btcPrice, btcAmount: btcAmount }
@@ -57,7 +59,6 @@ export class BuyBTCUseCase {
       amount: amountBRL,
       btcPriceAtTransaction: btcPrice,
       btcAmount: btcAmount,
-      account: account,
     }
     const createTransactions =
       await this.createTransactionsUseCase.createTransactions(
@@ -68,8 +69,8 @@ export class BuyBTCUseCase {
     return createTransactions
   }
 
-  private async updateAccountBalance(dto: any, req: any): Promise<any> {
-    const account = await this.updateAccountUseCase.updateAccount(dto, req)
+  private async updateAccountBalance(btcAmount: any, req: any): Promise<any> {
+    const account = await this.updateAccountUseCase.updateAccount(btcAmount, req)
     logger.warn('Update Account', account)
     return account
   }

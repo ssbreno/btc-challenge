@@ -56,4 +56,20 @@ export class FindAccountUseCase {
       throw new Error('Unsingned balance')
     }
   }
+
+  async checkAccountBTCBalance(req: any, dto: UpdateAccountDTO): Promise<any> {
+    const account = await this.accountRepository.findOne({
+      where: { id: req.account.id },
+    })
+
+    if (!account) {
+      throw new Error('Account not found')
+    }
+
+    const balance = Number(account.btcBalance)
+
+    if (balance === 0 && dto.amount < 0) {
+      throw new Error('Unsingned balance')
+    }
+  }
 }

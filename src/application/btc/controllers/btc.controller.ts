@@ -5,12 +5,14 @@ import { BuyBTCUseCase } from '../use-cases/buy-btc.use-case'
 import { extractToken } from '../../../shared/utils/extract-token'
 import { PositionBTCUseCase } from '../use-cases/position-btc.use-case'
 import { VolumeBTCUseCase } from '../use-cases/volume-btc.use-case'
+import { SellBTCUseCase } from '../use-cases/sell-btc.use-case'
 
 export class BTCController {
   private bTCMarketUseCase = new BTCMarketUseCase()
   private buyBTCUseCase = new BuyBTCUseCase()
   private positionBTCUseCase = new PositionBTCUseCase()
   private volumeBTCUseCase = new VolumeBTCUseCase()
+  private sellBTCUseCase = new SellBTCUseCase()
 
   constructor(private server: FastifyInstance) {
     logger.warn('[GET] /btc/price')
@@ -22,7 +24,7 @@ export class BTCController {
     logger.warn('[GET] /volume')
     this.server.get('/volume', this.volumeBTC.bind(this))
     logger.warn('[POST] /btc/sell')
-    this.server.post('/btc/sell', this.buyBTC.bind(this))
+    this.server.post('/btc/sell', this.sellBTC.bind(this))
   }
 
   async checkBTCMarket(
@@ -44,6 +46,19 @@ export class BTCController {
       const body = request.body
       const buyBTC = await this.buyBTCUseCase.execute(token, body)
       reply.send(buyBTC)
+    } catch (error) {
+      console.log(error)
+      reply.status(500).send(`Server error: ${error.message}`)
+    }
+  }
+
+  async sellBTC(request: FastifyRequest, reply: FastifyReply): Promise<void> {
+    try {
+      const token = extractToken(request, reply)
+      if (!token) return
+      const body = request.body
+      const sellBTC = await this.sellBTCUseCase.execute(token, body)
+      reply.send(sellBTC)
     } catch (error) {
       console.log(error)
       reply.status(500).send(`Server error: ${error.message}`)

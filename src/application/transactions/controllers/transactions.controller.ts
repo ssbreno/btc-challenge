@@ -2,10 +2,10 @@ import { FastifyInstance, FastifyRequest, FastifyReply } from 'fastify'
 import { FindAllTransactionsUseCase } from '../use-cases/find-all-transactions.use-case'
 import { logger } from '../../../shared/loggers/logger'
 import { FindAllTransactionsDTO } from '../../../domain/dtos/transactions/find-all-transactions.dto'
-import { extractToken } from '../../../shared/utils/extract-token';
+import { extractToken } from '../../../shared/utils/extract-token'
 
 export class TransactionsController {
-  private findAllTransactionsUseCase = new FindAllTransactionsUseCase();
+  private findAllTransactionsUseCase = new FindAllTransactionsUseCase()
 
   constructor(private server: FastifyInstance) {
     logger.warn('[GET] /extract')
@@ -17,9 +17,9 @@ export class TransactionsController {
     reply: FastifyReply,
   ): Promise<void> {
     try {
-      const dto = request.query as FindAllTransactionsDTO;
+      const dto = request.query as FindAllTransactionsDTO
       const token = extractToken(request, reply)
-      if (!token) return;
+      if (!token) return
       const transactions =
         await this.findAllTransactionsUseCase.findAllTransactions(dto, token)
       reply.send(transactions)

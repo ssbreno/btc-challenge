@@ -17,6 +17,9 @@ export class Account {
   @Column({ type: 'decimal', precision: 10, scale: 2, default: 0 })
   balance?: number
 
+  @Column('decimal', { precision: 18, scale: 8, nullable: true })
+  btcBalance?: number
+
   @Column('varchar', { unique: true })
   accountNumber?: string
 

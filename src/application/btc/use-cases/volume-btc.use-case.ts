@@ -1,18 +1,15 @@
-import { Between } from 'typeorm'
-import dataSource from '../../../config/datasource.config'
-import { Transaction } from '../../../domain/entities/transactions.entity'
 import { TransactionTypeEnum } from '../../../domain/enums/transaction-type.enum'
-import { startOfDay, endOfDay } from 'date-fns'
+import { FindTransactionsUseCase } from '../../transactions/use-cases/find-transactions.use-case'
 
 export class VolumeBTCUseCase {
-  private transactionsRepository = dataSource.getRepository(Transaction)
+  private findTransactionsUseCase = new FindTransactionsUseCase()
 
   async execute(): Promise<any> {
-    const buyTransactions = await this.fetchTransactions(
-      TransactionTypeEnum.BUY,
+    const buyTransactions = await this.findTransactionsUseCase.fetchTransactionsDateRange(
+      [TransactionTypeEnum.BUY],
     )
-    const sellTransactions = await this.fetchTransactions(
-      TransactionTypeEnum.SELL,
+    const sellTransactions = await this.findTransactionsUseCase.fetchTransactionsDateRange(
+      [TransactionTypeEnum.SELL, TransactionTypeEnum.PARCIAL_SELL],
     )
 
     const totalBoughtBtc = buyTransactions.reduce(
@@ -30,17 +27,4 @@ export class VolumeBTCUseCase {
     }
   }
 
-  private async fetchTransactions(
-    type: TransactionTypeEnum,
-  ): Promise<Transaction[]> {
-    const todayStart = startOfDay(new Date())
-    const todayEnd = endOfDay(new Date())
-
-    return this.transactionsRepository.find({
-      where: {
-        type: type,
-        createdAt: Between(todayStart, todayEnd),
-      },
-    })
-  }
 }

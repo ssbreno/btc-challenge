@@ -21,6 +21,8 @@ export class BTCController {
     this.server.get('/btc', this.positionBTC.bind(this))
     logger.warn('[GET] /volume')
     this.server.get('/volume', this.volumeBTC.bind(this))
+    logger.warn('[POST] /btc/sell')
+    this.server.post('/btc/sell', this.buyBTC.bind(this))
   }
 
   async checkBTCMarket(

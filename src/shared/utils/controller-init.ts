@@ -17,7 +17,7 @@ export const initializeControllers = (
 
   server.addHook('preHandler', async (request, reply) => {
     if (allUnprotectedRoutes.includes(request.routerPath)) {
-      return
+      return;
     }
     return authGuard(request, reply)
   })

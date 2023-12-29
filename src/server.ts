@@ -1,5 +1,4 @@
 import 'reflect-metadata'
-import fastify from 'fastify'
 import fastifyExpress from '@fastify/express'
 import passport from 'passport'
 import { HealthCheckController } from './application/health-check/controllers/health-check.controller'
@@ -16,6 +15,8 @@ import { DeleteHistoryUseCase } from './application/history/use-cases/delete-his
 import { BTCMarketUseCase } from './application/btc/use-cases/find-btc.use-case'
 import { CreateHistoryUseCase } from './application/history/use-cases/create-history.use-case'
 import { HistoryController } from './application/history/controllers/history.controller'
+import fastify from 'fastify'
+import { TransactionsController } from './application/transactions/controllers/transactions.controller'
 
 dotenv.config()
 
@@ -37,6 +38,7 @@ const startServer = async () => {
     UserController,
     AccountController,
     HistoryController,
+    TransactionsController,
   ]
 
   initializeControllers(server, controllers)
@@ -68,13 +70,14 @@ const startServer = async () => {
     }
   }
 
+  cron.schedule('0 0 * * *', runDeleteHistoryJob)
+  cron.schedule('*/10 * * * *', fetchBitcoinPricesJob)
+
   try {
-    await server.listen(3000)
-    logger.info('Server listening on port 3000')
-    cron.schedule('0 0 * * *', runDeleteHistoryJob)
-    cron.schedule('*/10 * * * *', fetchBitcoinPricesJob)
+    await server.listen({ port: 3000 });
+    server.log.info(`Server listening on 3000`);
   } catch (err) {
-    server.log.error(err)
+    logger.error(err)
     process.exit(1)
   }
 }

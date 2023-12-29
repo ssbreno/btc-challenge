@@ -4,7 +4,7 @@ import { AuthDTO } from '../../../domain/dtos/auth/auth.dto'
 import { LoginUseCase } from '../use-cases/login.use-case'
 
 export class UserController {
-  public unprotectedRoutes = ['/login']
+  public unprotectedRoutes = ['/login', '/api']
   private loginUseCase = new LoginUseCase()
 
   constructor(private server: FastifyInstance) {

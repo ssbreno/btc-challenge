@@ -55,14 +55,3 @@ npm test
 BTC-CHALLENGE is an ongoing project aimed at providing a comprehensive platform for simulating Bitcoin trading. Your contributions and feedback are welcome!
 
 <img width="635" alt="image" src="https://github.com/ssbreno/btc-challenge/assets/8092325/2d761dd4-8810-4831-bd4d-33316ed6b156">
-
-
-### Enhancements Made:
-
-- **Introduction Section**: Provides a brief overview of the project.
-- **Technologies Used**: Clarified the role of each technology in the project.
-- **Getting Started**: Step-by-step guide on how to set up and run the project.
-- **Testing**: Separate section for how to run tests.
-- **Conclusion**: A closing note that invites contributions and feedback.
-
-Feel free to adjust the content according to the specifics of your project and its current state. A well-documented `README.md` significantly contributes to the user experience of anyone who visits your repository.

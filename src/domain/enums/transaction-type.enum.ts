@@ -3,4 +3,5 @@ export enum TransactionTypeEnum {
   DEPOSIT = 'DEPOSIT',
   SELL = 'SELL',
   PARCIAL_SELL = 'PARCIAL_SELL',
+  WITHDRAW = 'WITHDRAW',
 }

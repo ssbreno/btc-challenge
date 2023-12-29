@@ -74,8 +74,8 @@ const startServer = async () => {
   cron.schedule('*/10 * * * *', fetchBitcoinPricesJob)
 
   try {
-    await server.listen({ port: 3000 });
-    server.log.info(`Server listening on 3000`);
+    await server.listen({ port: 3000 })
+    server.log.info(`Server listening on 3000`)
   } catch (err) {
     logger.error(err)
     process.exit(1)

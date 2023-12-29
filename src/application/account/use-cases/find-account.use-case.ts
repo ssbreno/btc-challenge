@@ -10,16 +10,16 @@ interface FormattedAccount {
 export class FindAccountUseCase {
   private accountRepository = dataSource.getRepository(Account)
 
-   async getAccount(req: any): Promise<Account> {
+  async getAccount(req: any): Promise<Account> {
     const account = await this.accountRepository.findOne({
       where: { id: req.account.id },
-    });
+    })
 
     if (!account) {
-      throw new Error('Account not found');
+      throw new Error('Account not found')
     }
 
-    return account;
+    return account
   }
 
   async findBalance(req: any): Promise<any> {

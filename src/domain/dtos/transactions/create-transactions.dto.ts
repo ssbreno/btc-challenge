@@ -1,5 +1,6 @@
 import { IsDecimal, IsEnum, IsNotEmpty, IsOptional } from 'class-validator'
 import { TransactionTypeEnum } from '../../enums/transaction-type.enum'
+import { Account } from '../../entities/account.entity'
 
 export class CreateTransactionsDTO {
   @IsNotEmpty()
@@ -17,4 +18,7 @@ export class CreateTransactionsDTO {
   @IsDecimal()
   @IsOptional()
   btcAmount?: number
+
+  @IsOptional()
+  account?: Account
 }

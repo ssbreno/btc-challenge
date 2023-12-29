@@ -22,12 +22,12 @@ export class FindTransactionsUseCase {
     const latestBuyTransaction = await this.transactionsRepository.findOne({
       where: {
         account: { id: req.account.id },
-        type: TransactionTypeEnum.BUY
+        type: TransactionTypeEnum.BUY,
       },
       order: {
-        createdAt: 'DESC'
+        createdAt: 'DESC',
       },
-    });
-    return latestBuyTransaction;
+    })
+    return latestBuyTransaction
   }
 }

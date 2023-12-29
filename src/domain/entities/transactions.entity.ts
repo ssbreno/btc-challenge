@@ -28,8 +28,8 @@ export class Transaction {
   amount?: number
 
   @Column('decimal', { precision: 18, scale: 8, nullable: true })
-  btcAmount?: number;
-  
+  btcAmount?: number
+
   @Column('decimal', { precision: 10, scale: 2, nullable: true })
   btcPriceAtTransaction?: number
 

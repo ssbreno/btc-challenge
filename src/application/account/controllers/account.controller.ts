@@ -12,10 +12,9 @@ export class AccountController {
   public unprotectedRoutes = ['/account']
   private userUseCase = new CreateUserUseCase()
   private findAccountUseCase = new FindAccountUseCase()
-  private depositAccountUseCase = new DepositAccountUseCase();
+  private depositAccountUseCase = new DepositAccountUseCase()
 
   constructor(private server: FastifyInstance) {
-    this.userUseCase = new CreateUserUseCase()
     logger.warn('[POST] /account')
     this.server.post('/account', this.createAccount.bind(this))
     logger.warn('[GET] /account/balance')

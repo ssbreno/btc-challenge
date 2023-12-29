@@ -17,9 +17,9 @@ export class History {
   @UpdateDateColumn()
   updatedAt?: Date
 
-  @Column('decimal', { precision: 10, scale: 2 })
+  @Column('decimal', { precision: 10, scale: 2, nullable: true })
   buyPrice: number
 
-  @Column('decimal', { precision: 10, scale: 2 })
+  @Column('decimal', { precision: 10, scale: 2, nullable: true })
   sellPrice: number
 }

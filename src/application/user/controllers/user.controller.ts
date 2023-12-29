@@ -8,7 +8,6 @@ export class UserController {
   private loginUseCase = new LoginUseCase()
 
   constructor(private server: FastifyInstance) {
-    this.loginUseCase = new LoginUseCase()
     logger.warn('[POST] /login')
     this.server.post('/login', this.login.bind(this))
   }

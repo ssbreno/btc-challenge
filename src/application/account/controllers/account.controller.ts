@@ -3,7 +3,7 @@ import { CreateUserDTO } from '../../../domain/dtos/user/create-user.dto'
 import { logger } from '../../../shared/loggers/logger'
 import { CreateUserUseCase } from '../../user/use-cases/create-user.use-case'
 import { FindAccountUseCase } from '../use-cases/find-account.use-case'
-import { extractToken } from '../../../shared/utils/extract-token'
+import { authUtils } from '../../../shared/utils/extract-token'
 import { UpdateAccountDTO } from '../../../domain/dtos/account/update-account.dto'
 import { Account } from '../../../domain/entities/account.entity'
 import { DepositAccountUseCase } from '../use-cases/deposit-account.use-case'
@@ -36,7 +36,7 @@ export class AccountController {
     request: FastifyRequest,
     reply: FastifyReply,
   ): Promise<void> {
-    const token = extractToken(request, reply)
+    const token = authUtils.extractToken(request, reply)
     if (!token) return
     const balance = await this.findAccountUseCase.findBalance(token)
     reply.send(balance)
@@ -46,7 +46,7 @@ export class AccountController {
     request: FastifyRequest,
     reply: FastifyReply,
   ): Promise<Pick<Account, 'balance'>> {
-    const token = extractToken(request, reply)
+    const token = authUtils.extractToken(request, reply)
     if (!token) return
     const body: UpdateAccountDTO = request.body
     const balance = await this.depositAccountUseCase.execute(body, token)

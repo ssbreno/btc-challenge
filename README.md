@@ -11,7 +11,7 @@ BTC-CHALLENGE is a simulation platform for financial transactions with Bitcoin (
 - Docker
 - Fastify (Node.js framework)
 - JestJs (Testing framework)
-- TypeORM (ORM for TypeScript)
+- TypeORM (ORM for PostgreSQL)
 - PostgreSQL (Database)
 - MailJet (Email service)
 - Other Libraries: Prettier (Code formatter), ESLint (Linter)

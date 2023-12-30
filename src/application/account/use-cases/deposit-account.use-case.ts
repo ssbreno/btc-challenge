@@ -3,7 +3,7 @@ import { UpdateAccountDTO } from '../../../domain/dtos/account/update-account.dt
 import { Account } from '../../../domain/entities/account.entity'
 import { TransactionTypeEnum } from '../../../domain/enums/transaction-type.enum'
 import { sendEmail } from '../../../infrastructure/email/use-case/email.use-case'
-import { formatBalanceInBRL } from '../../../shared/utils/format-currency'
+import { currencyFormatter } from '../../../shared/utils/format-currency'
 import { CreateTransactionsUseCase } from '../../transactions/use-cases/create-transactions.use-case'
 import { FindTransactionsUseCase } from '../../transactions/use-cases/find-transactions.use-case'
 import { FindAccountUseCase } from './find-account.use-case'
@@ -73,7 +73,7 @@ export class DepositAccountUseCase {
     amount: number,
     balance: number,
   ) {
-    const formattedBalance = formatBalanceInBRL(balance)
+    const formattedBalance = currencyFormatter.formatBalanceInBRL(balance)
     await sendEmail(
       'ssobralbreno@gmail.com',
       'Deposit Confirmation',

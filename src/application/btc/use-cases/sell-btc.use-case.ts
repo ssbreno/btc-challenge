@@ -2,7 +2,7 @@ import { Account } from '../../../domain/entities/account.entity'
 import { TransactionTypeEnum } from '../../../domain/enums/transaction-type.enum'
 import { sendEmail } from '../../../infrastructure/email/use-case/email.use-case'
 import { logger } from '../../../shared/loggers/logger'
-import { formatBalanceInBRL } from '../../../shared/utils/format-currency'
+import { currencyFormatter } from '../../../shared/utils/format-currency'
 import { FindAccountUseCase } from '../../account/use-cases/find-account.use-case'
 import { UpdateAccountUseCase } from '../../account/use-cases/update-account.use-case'
 import { CreateTransactionsUseCase } from '../../transactions/use-cases/create-transactions.use-case'
@@ -19,7 +19,7 @@ export class SellBTCUseCase {
   async execute(req: any, body: any): Promise<any> {
     try {
       await this.findAccountUseCase.checkAccountBTCBalance(req, body)
-      if(body.amount < 0) throw new Error('Negative amount')
+      if (body.amount < 0) throw new Error('Negative amount')
       const [account, btcPrice] = await Promise.all([
         this.findAccountUseCase.getAccount(req),
         this.fetchBTCPrice(),
@@ -48,7 +48,9 @@ export class SellBTCUseCase {
 
   private async processSellTransactions(account, btcPrice, amountBRL, req) {
     const buyTransactions =
-      await this.findTransactionsUseCase.findLatestTransaction(req, [TransactionTypeEnum.BUY])
+      await this.findTransactionsUseCase.findLatestTransaction(req, [
+        TransactionTypeEnum.BUY,
+      ])
     let btcAmountSold = 0
     let totalBRLReceived = 0
     const btcAmountToSell = this.calculateBRLAmountFromBTC(amountBRL, btcPrice)
@@ -147,7 +149,7 @@ export class SellBTCUseCase {
   private async fetchBTCPrice(): Promise<any> {
     const btcPrice = await this.bTCMarketUseCase.execute()
     logger.warn('Checking BTC Price', btcPrice)
-    return btcPrice.ticker.last
+    return btcPrice.ticker.sell
   }
 
   private async sendConfirmationEmail(
@@ -155,7 +157,7 @@ export class SellBTCUseCase {
     amountBRL: number,
     btcAmount: number,
   ): Promise<void> {
-    const formattedBalance = formatBalanceInBRL(amountBRL)
+    const formattedBalance = currencyFormatter.formatBalanceInBRL(amountBRL)
     logger.warn('Sending Sell BTC Email')
     await sendEmail('ssobralbreno@gmail.com', 'BTC SELL', 'sell-btc', {
       user: userName,

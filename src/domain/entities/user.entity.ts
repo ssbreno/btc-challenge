@@ -11,7 +11,7 @@ import { Account } from './account.entity'
 @Entity()
 export class User {
   @PrimaryGeneratedColumn('uuid')
-  id?: number
+  id?: string
 
   @Column('varchar', { length: 250 })
   name?: string
@@ -29,5 +29,5 @@ export class User {
   updatedAt?: Date
 
   @OneToOne(() => Account, (account) => account.user)
-  account: Account
+  account?: Account
 }

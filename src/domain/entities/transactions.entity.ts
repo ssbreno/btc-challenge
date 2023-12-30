@@ -12,7 +12,7 @@ import { Account } from './account.entity'
 @Entity()
 export class Transaction {
   @PrimaryGeneratedColumn('uuid')
-  id: number
+  id: string
 
   @ManyToOne(() => Account, (account) => account.transactions)
   account?: Account

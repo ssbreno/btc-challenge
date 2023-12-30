@@ -5,12 +5,15 @@ export class VolumeBTCUseCase {
   private findTransactionsUseCase = new FindTransactionsUseCase()
 
   async execute(): Promise<any> {
-    const buyTransactions = await this.findTransactionsUseCase.fetchTransactionsDateRange(
-      [TransactionTypeEnum.BUY],
-    )
-    const sellTransactions = await this.findTransactionsUseCase.fetchTransactionsDateRange(
-      [TransactionTypeEnum.SELL, TransactionTypeEnum.PARCIAL_SELL],
-    )
+    const buyTransactions =
+      await this.findTransactionsUseCase.fetchTransactionsDateRange([
+        TransactionTypeEnum.BUY,
+      ])
+    const sellTransactions =
+      await this.findTransactionsUseCase.fetchTransactionsDateRange([
+        TransactionTypeEnum.SELL,
+        TransactionTypeEnum.PARCIAL_SELL,
+      ])
 
     const totalBoughtBtc = buyTransactions.reduce(
       (acc, t) => acc + Number(t.btcAmount || 0),
@@ -26,5 +29,4 @@ export class VolumeBTCUseCase {
       totalSoldBtc,
     }
   }
-
 }

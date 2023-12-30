@@ -3,18 +3,19 @@ import dataSource from '../../../config/datasource.config'
 import { Transaction } from '../../../domain/entities/transactions.entity'
 import { TransactionTypeEnum } from '../../../domain/enums/transaction-type.enum'
 import { logger } from '../../../shared/loggers/logger'
-import { toDecimal } from '../../../shared/utils/transformer-decimal'
+import { decimalUtils } from '../../../shared/utils/transformer-decimal'
 import { BTCMarketUseCase } from './find-btc.use-case'
 
 export class PositionBTCUseCase {
   private transactionsRepository = dataSource.getRepository(Transaction)
   private bTCMarketUseCase = new BTCMarketUseCase()
+  private toDecimal = decimalUtils.toDecimal
 
   async execute(req: any): Promise<any> {
     const transactions = await this.fetchTransactions(req)
-    const currentBtcPrice = toDecimal(await this.fetchBTCPrice())
+    const currentBtcPrice = this.toDecimal(await this.fetchBTCPrice())
     const totalInvested = this.calculateTotalInvested(transactions)
-    const accountBalance = toDecimal(transactions[0]?.account.balance)
+    const accountBalance = this.toDecimal(transactions[0]?.account.balance)
     const investmentPercentage = this.calculateInvestmentPercentage(
       totalInvested,
       accountBalance,
@@ -43,8 +44,8 @@ export class PositionBTCUseCase {
 
   private calculateTotalInvested(transactions: Transaction[]): Decimal {
     return transactions.reduce(
-      (acc, t) => acc.plus(toDecimal(t.amount)),
-      toDecimal(0),
+      (acc, t) => acc.plus(this.toDecimal(t.amount)),
+      this.toDecimal(0),
     )
   }
 
@@ -53,14 +54,14 @@ export class PositionBTCUseCase {
     accountBalance: Decimal,
   ): Decimal {
     return accountBalance.isZero()
-      ? toDecimal(0)
+      ? this.toDecimal(0)
       : totalInvested.div(accountBalance).mul(100)
   }
 
   private calculateTotalBTC(transactions: Transaction[]): Decimal {
     return transactions.reduce(
-      (acc, t) => acc.plus(toDecimal(t.btcAmount || 0)),
-      toDecimal(0),
+      (acc, t) => acc.plus(this.toDecimal(t.btcAmount || 0)),
+      this.toDecimal(0),
     )
   }
 
@@ -69,9 +70,9 @@ export class PositionBTCUseCase {
     currentBtcPrice: Decimal,
   ) {
     return transactions.map((t) => {
-      const btcPriceAtTransaction = toDecimal(t.btcPriceAtTransaction || 0)
+      const btcPriceAtTransaction = this.toDecimal(t.btcPriceAtTransaction || 0)
       const priceVariation = btcPriceAtTransaction.isZero()
-        ? toDecimal(0)
+        ? this.toDecimal(0)
         : currentBtcPrice
             .sub(btcPriceAtTransaction)
             .div(btcPriceAtTransaction)

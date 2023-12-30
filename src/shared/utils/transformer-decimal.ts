@@ -1,7 +1,11 @@
 import Decimal from 'decimal.js'
 
-export const toDecimal = (
-  value: string | number | null | undefined,
-): Decimal => {
-  return new Decimal(value || 0)
+export interface IDecimalUtils {
+  toDecimal(value: string | number | null | undefined): Decimal
+}
+
+export const decimalUtils: IDecimalUtils = {
+  toDecimal: (value: string | number | null | undefined): Decimal => {
+    return new Decimal(value || 0)
+  },
 }

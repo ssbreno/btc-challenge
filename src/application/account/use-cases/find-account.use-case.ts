@@ -1,7 +1,7 @@
 import dataSource from '../../../config/datasource.config'
 import { UpdateAccountDTO } from '../../../domain/dtos/account/update-account.dto'
 import { Account } from '../../../domain/entities/account.entity'
-import { formatBalanceInBRL } from '../../../shared/utils/format-currency'
+import { currencyFormatter } from '../../../shared/utils/format-currency'
 
 interface FormattedAccount {
   balance: string
@@ -32,7 +32,8 @@ export class FindAccountUseCase {
     }
 
     const accountBalance = parseFloat(account.balance.toString())
-    const formattedBalance = formatBalanceInBRL(accountBalance)
+    const formattedBalance =
+      currencyFormatter.formatBalanceInBRL(accountBalance)
 
     const showBalance: FormattedAccount = {
       balance: formattedBalance,

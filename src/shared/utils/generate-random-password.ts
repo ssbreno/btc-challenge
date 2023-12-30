@@ -1,7 +1,12 @@
 import { hashSync } from 'bcryptjs'
-import { genSalt } from './bcrypt-hash'
+import { bcryptUtils } from './bcrypt-hash'
+export interface IPasswordUtils {
+  generateRandomPassword(randomString: string): Promise<string>
+}
 
-export const generateRandomPassword = async (randomString: string) => {
-  const password = hashSync(randomString, await genSalt())
-  return password
+export const passwordUtils: IPasswordUtils = {
+  generateRandomPassword: async (randomString: string): Promise<string> => {
+    const password = hashSync(randomString, await bcryptUtils.genSalt())
+    return password
+  },
 }

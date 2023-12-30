@@ -2,7 +2,7 @@ import { FastifyInstance, FastifyReply, FastifyRequest } from 'fastify'
 import { logger } from '../../../shared/loggers/logger'
 import { BTCMarketUseCase } from '../use-cases/find-btc.use-case'
 import { BuyBTCUseCase } from '../use-cases/buy-btc.use-case'
-import { extractToken } from '../../../shared/utils/extract-token'
+import { authUtils } from '../../../shared/utils/extract-token'
 import { PositionBTCUseCase } from '../use-cases/position-btc.use-case'
 import { VolumeBTCUseCase } from '../use-cases/volume-btc.use-case'
 import { SellBTCUseCase } from '../use-cases/sell-btc.use-case'
@@ -41,7 +41,7 @@ export class BTCController {
 
   async buyBTC(request: FastifyRequest, reply: FastifyReply): Promise<void> {
     try {
-      const token = extractToken(request, reply)
+      const token = authUtils.extractToken(request, reply)
       if (!token) return
       const body = request.body
       const buyBTC = await this.buyBTCUseCase.execute(token, body)
@@ -54,7 +54,7 @@ export class BTCController {
 
   async sellBTC(request: FastifyRequest, reply: FastifyReply): Promise<void> {
     try {
-      const token = extractToken(request, reply)
+      const token = authUtils.extractToken(request, reply)
       if (!token) return
       const body = request.body
       const sellBTC = await this.sellBTCUseCase.execute(token, body)
@@ -70,7 +70,7 @@ export class BTCController {
     reply: FastifyReply,
   ): Promise<void> {
     try {
-      const token = extractToken(request, reply)
+      const token = authUtils.extractToken(request, reply)
       if (!token) return
       const buyBTC = await this.positionBTCUseCase.execute(token)
       reply.send(buyBTC)
